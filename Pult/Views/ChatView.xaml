@@ -1,0 +1,178 @@
+﻿<UserControl x:Class="Pult.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
+             TextOptions.TextRenderingMode="ClearType">
+
+    <Grid x:Name="RootGrid" Margin="24,20,24,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ШАПКА: логотип и заголовок слева, статус и «Очистить» справа -->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Margin="0,0,0,10">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border x:Name="StatusPill" Background="{DynamicResource B_Soft}"
+                            BorderBrush="{DynamicResource B_Accent}" BorderThickness="1"
+                            Padding="6" Margin="0,0,10,0" VerticalAlignment="Center"
+                            ToolTip="Модель и инструменты — наведи">
+                        <Ellipse Width="8" Height="8" Fill="{DynamicResource B_Accent}"/>
+                    </Border>
+                    <Button Click="ClearChat_Click" Cursor="Hand" Padding="12,0" Height="32"
+                            Background="Transparent" Foreground="{DynamicResource B_Muted}"
+                            BorderThickness="0" ToolTip="Очистить чат">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center"/>
+                            <TextBlock Text="Очистить" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Плитка-логотип -->
+                    <Border x:Name="LogoTile" Width="36" Height="36" Margin="0,0,12,0"
+                            Background="{DynamicResource B_Soft}" BorderBrush="{DynamicResource B_Accent}"
+                            BorderThickness="1">
+                        <TextBlock Text="&#xE8F2;" FontFamily="Segoe MDL2 Assets" FontSize="17"
+                                   Foreground="{DynamicResource B_Accent}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Ассистент" FontFamily="{DynamicResource F_Ui}" FontSize="15"
+                                   Foreground="{DynamicResource B_Text}"/>
+                        <TextBlock Text="локальная модель • всё остаётся у тебя" FontSize="10"
+                                   Foreground="{DynamicResource B_Muted}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+            <!-- Тонкая линия-разделитель на всю ширину -->
+            <Border Grid.Row="1" Height="1" Background="{DynamicResource B_Border}"/>
+        </Grid>
+
+        <!-- Сообщения: фон прозрачный, без водяных знаков -->
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="ChatScroll" VerticalScrollBarVisibility="Auto"
+                          Background="Transparent" ScrollChanged="ChatScroll_ScrollChanged">
+                <StackPanel x:Name="MessagesPanel" Margin="16,14,16,14">
+                    <Grid x:Name="EmptyState" Margin="0,16,0,0" MaxWidth="660">
+                        <!-- Пустое состояние Chat 3: заголовок, поле ввода
+                             по центру (SetEmpty переносит InputBar сюда из
+                             нижней строки), подсказка Enter, 4 ссылки, статус. -->
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="Что делаем?" FontFamily="{DynamicResource F_Ui}"
+                                       FontSize="24" Foreground="{DynamicResource B_Text}"
+                                       HorizontalAlignment="Center" TextAlignment="Center"/>
+                            <!-- Место поля ввода, пока чат пуст -->
+                            <Grid x:Name="EmptySlot" Margin="0,22,0,0" HorizontalAlignment="Stretch"/>
+                            <TextBlock Text="Enter — отправить • Shift+Enter — перенос строки"
+                                       FontSize="11" Foreground="{DynamicResource B_Muted}"
+                                       HorizontalAlignment="Center" Margin="0,9,0,0"/>
+                            <!-- Однострочные ссылки-подсказки (вместо карточек) -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                        Margin="0,24,0,0">
+                                <TextBlock Text="Настрой" FontSize="13" Cursor="Hand"
+                                           Foreground="{DynamicResource B_Accent}"
+                                           MouseLeftButtonUp="QuickLink_Click" Tag="settings"
+                                           ToolTip="Открыть Настройки"/>
+                                <TextBlock Text="·" FontSize="13" Margin="10,0"
+                                           Foreground="{DynamicResource B_Muted}"/>
+                                <TextBlock Text="Разберись" FontSize="13" Cursor="Hand"
+                                           Foreground="{DynamicResource B_Accent}"
+                                           MouseLeftButtonUp="QuickLink_Click"
+                                           Tag="Разберись, почему система тормозит"
+                                           ToolTip="Спросить, почему система тормозит"/>
+                                <TextBlock Text="·" FontSize="13" Margin="10,0"
+                                           Foreground="{DynamicResource B_Muted}"/>
+                                <TextBlock Text="Ускорь" FontSize="13" Cursor="Hand"
+                                           Foreground="{DynamicResource B_Accent}"
+                                           MouseLeftButtonUp="QuickLink_Click"
+                                           Tag="Ускорь систему: что можно сделать"
+                                           ToolTip="Спросить, как ускорить систему"/>
+                                <TextBlock Text="·" FontSize="13" Margin="10,0"
+                                           Foreground="{DynamicResource B_Muted}"/>
+                                <TextBlock Text="Найди" FontSize="13" Cursor="Hand"
+                                           Foreground="{DynamicResource B_Accent}"
+                                           MouseLeftButtonUp="QuickLink_Click"
+                                           Tag="Найди в интернете, как ускорить Windows"
+                                           ToolTip="Найти в интернете инструкцию"/>
+                            </StackPanel>
+                            <TextBlock x:Name="EmptyStatusText" Text="" FontSize="11"
+                                       Foreground="{DynamicResource B_Muted}"
+                                       HorizontalAlignment="Center" Margin="0,26,0,0"
+                                       TextWrapping="Wrap" TextAlignment="Center"/>
+                            <TextBlock x:Name="EmptyTipText" Text="" FontSize="11"
+                                       Foreground="{DynamicResource B_Muted}"
+                                       HorizontalAlignment="Center" Margin="0,8,0,0"
+                                       TextWrapping="Wrap" TextAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+            <Button x:Name="ScrollDownButton" Click="ScrollDownButton_Click" Cursor="Hand"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,22,16"
+                    Padding="10,4" Height="28" Visibility="Collapsed"
+                    Background="{DynamicResource B_Tile}" Foreground="{DynamicResource B_Text}"
+                    BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+                    ToolTip="Прокрутить вниз">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE96D;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBlock Text="вниз" FontSize="12" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Поле ввода: рамка с фокусом, чип-подсказка и кнопка отправки -->
+        <Grid x:Name="InputBar" Grid.Row="2" Margin="0,14,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="InputWrap" Background="{DynamicResource B_Panel}" BorderThickness="1">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{DynamicResource B_Border}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter Property="BorderBrush" Value="{DynamicResource B_Accent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBox x:Name="InputBox" Height="42" Padding="14,0"
+                         Background="Transparent" BorderThickness="0"
+                         VerticalContentAlignment="Center" FontSize="14"
+                         Foreground="{DynamicResource B_Text}"
+                         AcceptsReturn="True" TextWrapping="Wrap"
+                         KeyDown="InputBox_KeyDown" PreviewKeyDown="InputBox_PreviewKeyDown"
+                         ToolTip="Enter — отправить. Shift+Enter — перенос строки."/>
+            </Border>
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Border x:Name="HintChip" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Background="{DynamicResource B_Tile}" BorderBrush="{DynamicResource B_Border}"
+                        BorderThickness="1" Padding="10,4">
+                    <TextBlock Text="Enter — отправить" FontSize="11"
+                               Foreground="{DynamicResource B_Muted}"/>
+                </Border>
+                <Button x:Name="SendButton" HorizontalAlignment="Right" VerticalAlignment="Center"
+                        Click="SendButton_Click" Cursor="Hand" Padding="14,0" Height="38"
+                        Background="{DynamicResource B_Accent}" Foreground="White"
+                        BorderThickness="0" ToolTip="Отправить (Enter). Shift+Enter — перенос строки.">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="SendIcon" Text="&#xE724;" FontFamily="Segoe MDL2 Assets"
+                                   FontSize="15" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="SendLabel" Text="Отправить" FontSize="12" Margin="8,0,0,0"
+                                   VerticalAlignment="Center" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
+
+

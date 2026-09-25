@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET: Pult Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/Pult/bin/Debug/net10.0-windows/Pult.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Pult",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}

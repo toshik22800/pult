@@ -1,0 +1,746 @@
+﻿<Window x:Class="Pult.WelcomeWizard"
+
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        Title="Пульт — настройка" Width="660" Height="640"
+
+        Background="{DynamicResource B_Border}"
+
+        WindowStyle="None" ResizeMode="NoResize"
+
+        WindowStartupLocation="CenterScreen"
+
+        AllowsTransparency="True"
+
+        PreviewKeyDown="Key_Press">
+
+    <Window.Resources>
+
+        <!-- Акцентная кнопка основного действия: гасится по прозрачности,
+
+             а не уходит в тёмный ховер дефолтного стиля. -->
+
+        <Style x:Key="AccentBtn" TargetType="Button">
+
+            <Setter Property="Background" Value="{DynamicResource B_Accent}"/>
+
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="FontSize" Value="13"/>
+
+            <Setter Property="Padding" Value="18,0"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border Background="{TemplateBinding Background}"
+
+                                Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Style.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="True">
+
+                    <Setter Property="Opacity" Value="0.88"/>
+
+                </Trigger>
+
+                <Trigger Property="IsPressed" Value="True">
+
+                    <Setter Property="Opacity" Value="0.74"/>
+
+                </Trigger>
+
+                <Trigger Property="IsEnabled" Value="False">
+
+                    <Setter Property="Opacity" Value="0.45"/>
+
+                </Trigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+    </Window.Resources>
+
+
+
+    <Grid TextElement.FontFamily="{DynamicResource F_Ui}" Margin="1">
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="36"/>
+
+            <RowDefinition Height="*"/>
+
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+
+
+
+        <!-- Шапка: перетаскивание + шаг + закрытие -->
+
+        <Border Grid.Row="0" Background="{DynamicResource B_Bg}"
+
+                BorderBrush="{DynamicResource B_Border}" BorderThickness="0,0,0,1"
+
+                MouseLeftButtonDown="Titlebar_Drag">
+
+            <Grid Margin="12,0,4,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets"
+
+                               FontSize="12" Foreground="{DynamicResource B_Accent}"
+
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock x:Name="StepLabel" Text="ШАГ 1 ИЗ 3" FontSize="10"
+
+                               Foreground="{DynamicResource B_Dim}"
+
+                               Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="&#x2715;" Width="36" Height="28"
+
+                        Background="Transparent" BorderThickness="0"
+
+                        Foreground="{DynamicResource B_Muted}" Cursor="Hand"
+
+                        ToolTip="Пропустить настройку" Click="Skip_Click"/>
+
+            </Grid>
+
+        </Border>
+
+
+
+        <!-- Контент: три шага в одном окне, переключаются Visibility -->
+
+        <Border Grid.Row="1" Background="{DynamicResource B_Bg}"
+
+                Padding="30,20,30,10">
+
+            <Grid>
+
+
+
+                <!-- Шаг 1: интерфейс -->
+
+                <StackPanel x:Name="Step1">
+
+                    <StackPanel HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                        <Border Width="76" Height="76" CornerRadius="38"
+
+                                Background="{DynamicResource B_Soft}"
+
+                                BorderBrush="{DynamicResource B_Accent}" BorderThickness="1"
+
+                                HorizontalAlignment="Center">
+
+                            <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets"
+
+                                       FontSize="30" Foreground="{DynamicResource B_Accent}"
+
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <TextBlock Text="Добро пожаловать" FontSize="21"
+
+                                   Foreground="{DynamicResource B_Text}"
+
+                                   HorizontalAlignment="Center" Margin="0,14,0,0"/>
+
+                        <TextBlock Text="Три вопроса — и Пульт настроится под тебя. Потом всё меняется в Настройках."
+
+                                   FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                   TextWrapping="Wrap" TextAlignment="Center"
+
+                                   MaxWidth="400" HorizontalAlignment="Center"
+
+                                   Margin="0,6,0,0"/>
+
+                    </StackPanel>
+
+
+
+                    <TextBlock Text="Как показывать интерфейс?" FontSize="13"
+
+                               Foreground="{DynamicResource B_Text}" Margin="0,22,0,0"/>
+
+                    <Grid Margin="0,10,0,0">
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*"/>
+
+                            <ColumnDefinition Width="14"/>
+
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <Button x:Name="TileSimple" Tag="ui0" Click="Ui_Click"
+
+                                Padding="14,12" MinHeight="92"
+
+                                HorizontalContentAlignment="Stretch">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="Auto"/>
+
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="30" Height="30" CornerRadius="6"
+
+                                        Background="{DynamicResource B_TileH}"
+
+                                        BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets"
+
+                                               FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+
+                                    <TextBlock Text="Просто" FontSize="13"
+
+                                               Foreground="{DynamicResource B_Text}"/>
+
+                                    <TextBlock Text="Только понятное, без сложного"
+
+                                               FontSize="11" Foreground="{DynamicResource B_Muted}"
+
+                                               TextWrapping="Wrap" Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                                <TextBlock x:Name="PillSimple" Grid.Column="2" Text="&#x25CF;"
+
+                                           FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                           VerticalAlignment="Top" Margin="8,2,0,0"/>
+
+                            </Grid>
+
+                        </Button>
+
+
+
+                        <Button x:Name="TileAdv" Grid.Column="2" Tag="ui1" Click="Ui_Click"
+
+                                Padding="14,12" MinHeight="92"
+
+                                HorizontalContentAlignment="Stretch">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="Auto"/>
+
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="30" Height="30" CornerRadius="6"
+
+                                        Background="{DynamicResource B_TileH}"
+
+                                        BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets"
+
+                                               FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+
+                                    <TextBlock Text="Подробно" FontSize="13"
+
+                                               Foreground="{DynamicResource B_Text}"/>
+
+                                    <TextBlock Text="Всё + экспериментальные функции"
+
+                                               FontSize="11" Foreground="{DynamicResource B_Muted}"
+
+                                               TextWrapping="Wrap" Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                                <TextBlock x:Name="PillAdv" Grid.Column="2" Text="&#x25CB;"
+
+                                           FontSize="14" Foreground="{DynamicResource B_Muted}"
+
+                                           VerticalAlignment="Top" Margin="8,2,0,0"/>
+
+                            </Grid>
+
+                        </Button>
+
+                    </Grid>
+
+                </StackPanel>
+
+
+
+                <!-- Шаг 2: эффекты + живое превью -->
+
+                <StackPanel x:Name="Step2" Visibility="Collapsed">
+
+                    <StackPanel HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                        <Border Width="64" Height="64" CornerRadius="32"
+
+                                Background="{DynamicResource B_Tile}"
+
+                                BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1"
+
+                                HorizontalAlignment="Center">
+
+                            <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets"
+
+                                       FontSize="26" Foreground="{DynamicResource B_Accent}"
+
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <TextBlock Text="Как рисовать эффекты?" FontSize="19"
+
+                                   Foreground="{DynamicResource B_Text}"
+
+                                   HorizontalAlignment="Center" Margin="0,12,0,0"/>
+
+                        <TextBlock Text="Эффекты — дыхание карточек, блики и свечения. Слабому ПК хватит минимума."
+
+                                   FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                   TextWrapping="Wrap" TextAlignment="Center"
+
+                                   MaxWidth="400" HorizontalAlignment="Center"
+
+                                   Margin="0,6,0,0"/>
+
+                    </StackPanel>
+
+
+
+                    <Grid Margin="0,20,0,0">
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*"/>
+
+                            <ColumnDefinition Width="14"/>
+
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+
+
+
+                        <Button x:Name="TileAuto" Tag="fxA" Click="Fx_Click"
+
+                                Padding="14,12" MinHeight="92"
+
+                                HorizontalContentAlignment="Stretch">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="30" Height="30" CornerRadius="6"
+
+                                        Background="{DynamicResource B_TileH}"
+
+                                        BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE770;" FontFamily="Segoe MDL2 Assets"
+
+                                               FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+
+                                    <TextBlock Text="Авто" FontSize="13"
+
+                                               Foreground="{DynamicResource B_Text}"/>
+
+                                    <TextBlock x:Name="AutoDesc" Text="Определю по железу"
+
+                                               FontSize="11" Foreground="{DynamicResource B_Muted}"
+
+                                               TextWrapping="Wrap" Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                                <TextBlock x:Name="PillAuto" Grid.Column="2" Text="&#x25CF;"
+
+                                           FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                           VerticalAlignment="Top" Margin="8,2,0,0"/>
+
+                            </Grid>
+
+                        </Button>
+
+
+
+                        <Button x:Name="TileMin" Grid.Column="2" Tag="fxM" Click="Fx_Click"
+
+                                Padding="14,12" MinHeight="92"
+
+                                HorizontalContentAlignment="Stretch">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="30" Height="30" CornerRadius="6"
+
+                                        Background="{DynamicResource B_TileH}"
+
+                                        BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE74C;" FontFamily="Segoe MDL2 Assets"
+
+                                               FontSize="14" Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+
+                                    <TextBlock Text="Минимум" FontSize="13"
+
+                                               Foreground="{DynamicResource B_Text}"/>
+
+                                    <TextBlock Text="Без анимаций, максимум скорости"
+
+                                               FontSize="11" Foreground="{DynamicResource B_Muted}"
+
+                                               TextWrapping="Wrap" Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                                <TextBlock x:Name="PillMin" Grid.Column="2" Text="&#x25CB;"
+
+                                           FontSize="14" Foreground="{DynamicResource B_Muted}"
+
+                                           VerticalAlignment="Top" Margin="8,2,0,0"/>
+
+                            </Grid>
+
+                        </Button>
+
+                    </Grid>
+
+
+
+                    <Border Background="{DynamicResource B_Tile}"
+
+                            BorderBrush="{DynamicResource B_Border}" BorderThickness="1"
+
+                            CornerRadius="6" Padding="14,12" Margin="0,14,0,0">
+
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+
+                                <RowDefinition Height="Auto"/>
+
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="PreviewText" Text="Авто: полосы дышат"
+
+                                       FontSize="11" Foreground="{DynamicResource B_Muted}"/>
+
+                            <Border x:Name="PreviewBar" Grid.Row="1" Height="4" Width="180"
+
+                                    HorizontalAlignment="Left" Margin="0,10,0,0"
+
+                                    Background="{DynamicResource B_Bar}" CornerRadius="2"/>
+
+                        </Grid>
+
+                    </Border>
+
+                </StackPanel>
+
+
+
+                <!-- Шаг 3: готово, что дальше -->
+
+                <StackPanel x:Name="Step3" Visibility="Collapsed">
+
+                    <StackPanel HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                        <Border Width="64" Height="64" CornerRadius="32"
+
+                                Background="{DynamicResource B_Soft}"
+
+                                BorderBrush="{DynamicResource B_Accent}" BorderThickness="1"
+
+                                HorizontalAlignment="Center">
+
+                            <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets"
+
+                                       FontSize="26" Foreground="{DynamicResource B_Accent}"
+
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <TextBlock Text="Готово" FontSize="19"
+
+                                   Foreground="{DynamicResource B_Text}"
+
+                                   HorizontalAlignment="Center" Margin="0,12,0,0"/>
+
+                        <TextBlock Text="С чего начать — три подсказки:"
+
+                                   FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                   HorizontalAlignment="Center" Margin="0,6,0,0"/>
+
+                    </StackPanel>
+
+
+
+                    <StackPanel Margin="0,18,0,0">
+
+                        <Grid Margin="0,0,0,10">
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="Auto"/>
+
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Ellipse Width="6" Height="6" Fill="{DynamicResource B_Accent}"
+
+                                     VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"
+
+                                       Text="Обзор — нагрузка, диск, свежие ошибки и обновления на одном экране"/>
+
+                        </Grid>
+
+                        <Grid Margin="0,0,0,10">
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="Auto"/>
+
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Ellipse Width="6" Height="6" Fill="{DynamicResource B_Accent}"
+
+                                     VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"
+
+                                       Text="Чат с ИИ, Твики Windows и железо — включаются в Настройках"/>
+
+                        </Grid>
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="Auto"/>
+
+                                <ColumnDefinition Width="*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Ellipse Width="6" Height="6" Fill="{DynamicResource B_Accent}"
+
+                                     VerticalAlignment="Center"/>
+
+                            <TextBlock Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"
+
+                                       Text="Всё меняется там же — ничего не залипает"/>
+
+                        </Grid>
+
+                    </StackPanel>
+
+
+
+                    <TextBlock Text="Расширенный режим: Настройки → Вид → Расширенный"
+
+                               FontSize="11" Foreground="{DynamicResource B_Muted}"
+
+                               HorizontalAlignment="Center" Margin="0,16,0,0"/>
+
+                </StackPanel>
+
+
+
+            </Grid>
+
+        </Border>
+
+
+
+        <!-- Футер: прогресс + шаговые кнопки -->
+
+        <Border Grid.Row="2" Background="{DynamicResource B_Bg}"
+
+                BorderBrush="{DynamicResource B_Border}" BorderThickness="0,1,0,0"
+
+                Padding="24,14">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Border x:Name="Chip1" Width="22" Height="4" CornerRadius="2"
+
+                            Background="{DynamicResource B_Accent}" Margin="0,0,6,0"/>
+
+                    <Border x:Name="Chip2" Width="22" Height="4" CornerRadius="2"
+
+                            Background="{DynamicResource B_Border}" Margin="0,0,6,0"/>
+
+                    <Border x:Name="Chip3" Width="22" Height="4" CornerRadius="2"
+
+                            Background="{DynamicResource B_Border}"/>
+
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Button x:Name="BackBtn" Content="Назад" Height="38" Padding="16,0"
+
+                            IsEnabled="False" Click="Back_Click"/>
+
+                    <Button x:Name="NextBtn" Style="{StaticResource AccentBtn}"
+
+                            Content="Далее →" Height="38" MinWidth="150"
+
+                            Margin="10,0,0,0" Click="Next_Click"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Window>
+

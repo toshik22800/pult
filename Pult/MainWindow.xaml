@@ -1,0 +1,258 @@
+﻿<Window x:Class="Pult.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Pult"
+        Title="Пульт" Width="1240" Height="820"
+        MinWidth="900" MinHeight="620"
+        WindowState="Maximized"
+        Background="{DynamicResource B_Bg}"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType">
+    <Grid x:Name="RootGrid" TextElement.FontFamily="{DynamicResource F_Ui}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SidebarColumn" Width="84"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Сайдбар -->
+        <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource B_Sidebar}">
+            <DockPanel>
+                <Button x:Name="CollapseButton" DockPanel.Dock="Top"
+                        FontFamily="Segoe MDL2 Assets" Content="&#xE700;" FontSize="16" Height="32" Margin="8"
+                        Background="Transparent" BorderThickness="0"
+                        Foreground="{DynamicResource B_Muted}" Cursor="Hand"
+                        Click="CollapseButton_Click"/>
+                <StackPanel DockPanel.Dock="Top" Margin="0,4,0,10">
+                    <TextBlock Text="&#xE3E7;" FontFamily="{StaticResource F_Icon}"
+                               FontSize="34" Foreground="White"
+                               HorizontalAlignment="Center" ToolTip="Пульт"/>
+                    <StackPanel x:Name="BrandText" Visibility="Collapsed" Margin="0,8,0,0">
+                        <TextBlock Text="Ассистент" FontFamily="{DynamicResource F_Ui}"
+                                   FontSize="12" Foreground="{DynamicResource B_Text}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="ModelLabel" Text="qwen2.5:7b" FontSize="11"
+                                   Foreground="{DynamicResource B_Muted}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="NavPanel" DockPanel.Dock="Top" Margin="12,0">
+                    <Button x:Name="NavBtnActions" Style="{StaticResource NavButton}" Tag="actions"
+                            ToolTip="Действия" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblActions" Text="Действия"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavBtnChat" Style="{StaticResource NavButton}" Tag="chat"
+                            ToolTip="Ассистент" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8BD;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblChat" Text="Ассистент"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavButton}" Tag="games"
+                            ToolTip="Игры" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblGames" Text="Игры"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavBtnSystem" Style="{StaticResource NavButton}" Tag="system"
+                            ToolTip="Система" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7F8;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblSystem" Text="Система"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavButton}" Tag="settings"
+                            ToolTip="Настройки" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblSettings" Text="Настройки"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavBtnHistory" Style="{StaticResource NavButton}" Tag="history"
+                            ToolTip="История" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE81C;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblHistory" Text="История"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavButton}" Tag="widgets"
+                            ToolTip="Виджеты" Click="Nav_Click" Margin="0,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE950;" FontFamily="Segoe MDL2 Assets"
+                                       FontSize="20" Width="28" TextAlignment="Center"
+                                       Foreground="{DynamicResource B_Muted}"/>
+                            <TextBlock x:Name="NavLblWidgets" Text="Виджеты"
+                                       Visibility="Collapsed" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Контент -->
+        <Grid Grid.Row="0" Grid.Column="1" x:Name="ViewHost">
+        <!-- 🆕 Максимум: аура-фон — мягкое акцентное свечение под контентом,
+             дышит и медленно гуляет (кисть и анимации — в ApplyAppearance).
+             Растянута на весь хост: радиус градиента в кисти гарантирует
+             нулевую прозрачность ДО краёв — жёсткой линии поперёк экрана
+             больше нет. Вне Максимума скрыта. -->
+        <Border x:Name="AuraGlow" IsHitTestVisible="False" Visibility="Collapsed"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0"/>
+        <ScrollViewer x:Name="ActionsView" VerticalScrollBarVisibility="Auto"
+                      Background="{DynamicResource DotGrid}">
+            <StackPanel x:Name="ContentPanel" Margin="24,20,24,24"
+                        SizeChanged="ContentPanel_SizeChanged">
+                <!-- Герой: свечение — на рамке сзади, текст спереди остаётся чётким -->
+                <Grid>
+                    <Border x:Name="HeroGlowFrame" Background="Transparent"
+                            BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+                            IsHitTestVisible="False"/>
+                    <Border x:Name="HeroCard" Background="{DynamicResource B_Card}" CornerRadius="0"
+                            BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+                            Padding="24,20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock x:Name="GreetingText" Text="Добрый день"
+                                       FontFamily="{DynamicResource F_Ui}" FontSize="15"
+                                       Foreground="{DynamicResource B_Text}"/>
+                            <TextBlock x:Name="DateText" FontSize="13"
+                                       Foreground="{DynamicResource B_Muted}"
+                                       Margin="0,4,0,0"/>
+                            <TextBlock Text="Нажми на карточку — действие выполнится сразу."
+                                       FontSize="13" Foreground="{DynamicResource B_Dim}"
+                                       Margin="0,12,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                    VerticalAlignment="Center" Margin="24,0,0,0">
+                            <StackPanel Margin="14,0" HorizontalAlignment="Center">
+                                <Grid Width="92" Height="92">
+<Polyline x:Name="CpuSpark" Width="76" Height="30" Stroke="{DynamicResource B_Accent}" StrokeThickness="2" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <local:Ring x:Name="CpuRing" Value="0" Segments="28" Track="{DynamicResource B_BorderH}"
+                                                Fill="{DynamicResource B_Accent}" Thickness="7"/>
+                                    <TextBlock x:Name="CpuPct" Text="–" FontFamily="{DynamicResource F_Ui}" FontSize="14" Foreground="{DynamicResource B_Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock Text="CPU" FontSize="11"
+                                           Foreground="{DynamicResource B_Muted}"
+                                           HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="14,0" HorizontalAlignment="Center">
+                                <Grid Width="92" Height="92">
+<Polyline x:Name="RamSpark" Width="76" Height="30" Stroke="{DynamicResource B_Accent}" StrokeThickness="2" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <local:Ring x:Name="RamRing" Value="0" Segments="28" Track="{DynamicResource B_BorderH}"
+                                                Fill="{DynamicResource B_Accent}" Thickness="7"/>
+                                    <TextBlock x:Name="RamPct" Text="–" FontFamily="{DynamicResource F_Ui}"
+                                               FontSize="14" Foreground="{DynamicResource B_Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock Text="RAM" FontSize="11"
+                                           Foreground="{DynamicResource B_Muted}"
+                                           HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="14,0" HorizontalAlignment="Center">
+                                <Grid Width="92" Height="92">
+<Polyline x:Name="DiskSpark" Width="76" Height="30" Stroke="{DynamicResource B_Accent}" StrokeThickness="2" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <local:Ring x:Name="DiskRing" Value="0" Segments="28" Track="{DynamicResource B_BorderH}"
+                                                Fill="{DynamicResource B_Accent}" Thickness="7"/>
+                                    <TextBlock x:Name="DiskPct" Text="–" FontFamily="{DynamicResource F_Ui}"
+                                               FontSize="14" Foreground="{DynamicResource B_Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock Text="Диск" FontSize="11"
+                                           Foreground="{DynamicResource B_Muted}"
+                                           HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            </StackPanel>
+                            <StackPanel x:Name="PulseRingBox" Margin="14,0" HorizontalAlignment="Center">
+                                <Grid Width="92" Height="92">
+<Polyline x:Name="PulseSpark" Width="76" Height="30" Stroke="{DynamicResource B_Accent}" StrokeThickness="2" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+                                    <local:Ring x:Name="PulseRing" Value="0" Segments="28" Track="{DynamicResource B_BorderH}"
+                                                Fill="{DynamicResource B_Accent}" Thickness="7"/>
+                                    <TextBlock x:Name="PulsePct" Text="–" FontFamily="{DynamicResource F_Ui}"
+                                               FontSize="14" Foreground="{DynamicResource B_Text}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock Text="Пульс" FontSize="11"
+                                           Foreground="{DynamicResource B_Muted}"
+                                           HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <!-- 🆕 Максимум: блик по верху героя — статичный,
+                             дышит прозрачностью и по нему бежит свет (SheenFx, 0.14.1) -->
+                        <Border x:Name="HeroSheen" IsHitTestVisible="False" Width="260" Height="2"
+                                Background="{DynamicResource B_Bar}" Opacity="0.9"
+                                HorizontalAlignment="Center" VerticalAlignment="Top"
+                                Visibility="Collapsed"/>
+                    </Grid>
+                </Border>
+                </Grid>
+
+                <!-- Карточки -->
+                <UniformGrid x:Name="CardsGrid" Columns="3" Margin="0,12,0,0"/>
+
+                <TextBlock Margin="6,20,0,0" FontSize="12"
+                           Foreground="{DynamicResource B_Muted}"
+                           TextWrapping="Wrap"
+                           x:Name="ActionsHint" Text="Эти действия работают мгновенно и без интернета. Горячие клавиши: Ctrl+Alt+1…8."/>
+            </StackPanel>
+        </ScrollViewer>
+        </Grid>
+
+        <!-- Статус-строка: слева статус, справа — живые метрики и версия -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Background="{DynamicResource B_Sidebar}"
+                BorderBrush="{DynamicResource B_Border}" BorderThickness="0,1,0,0"
+                Padding="16,8">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse x:Name="StatusDot" Width="8" Height="8" Fill="#3FB950" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="BottomStatus" Text="Готов" FontSize="12"
+                               Foreground="{DynamicResource B_Dim}" Margin="8,0,0,0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock x:Name="StatusStats" Text="" FontSize="12"
+                               Foreground="{DynamicResource B_Dim}"
+                               VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource B_Soft}"
+                            BorderBrush="{DynamicResource B_Border}" BorderThickness="1"
+                            Padding="7,2" Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="VersionChip" Text="v0.12.0"
+                                   FontFamily="{DynamicResource F_Ui}" FontSize="8"
+                                   Foreground="{DynamicResource B_Muted}"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

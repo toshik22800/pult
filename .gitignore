@@ -1,0 +1,19 @@
+# ---- сборка ----
+[Bb]in/
+[Oo]bj/
+publish/
+*.user
+*.suo
+.vs/
+
+# ---- артефакты: ложить в GitHub Releases, не в git ----
+*.zip
+
+# ---- рабочие дампы/перемещалки кода (дублируют исходники) ----
+transfer-*.txt
+mktransfer.py
+fpx_list.txt
+
+# ---- служебное ----
+*.log
+*.tmp

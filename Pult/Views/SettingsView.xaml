@@ -1,0 +1,1486 @@
+﻿<UserControl x:Class="Pult.Views.SettingsView"
+
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
+
+             TextOptions.TextRenderingMode="ClearType">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
+
+        <Grid Margin="24,20,24,24">
+
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+
+
+            <!-- Заголовок + статус-пилюля -->
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Настройки" FontFamily="{DynamicResource F_Ui}"
+
+                           FontSize="15" Foreground="{DynamicResource B_Text}"
+
+                           VerticalAlignment="Center"/>
+
+                <Border Grid.Column="1" Background="{DynamicResource B_Tile}"
+
+                        BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+
+                        Padding="12,6" VerticalAlignment="Center">
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <TextBlock Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" FontSize="13"
+
+                                   Foreground="{DynamicResource B_Accent}" VerticalAlignment="Center"/>
+
+                        <TextBlock x:Name="StatusPillText" FontSize="12"
+
+                                   Foreground="{DynamicResource B_Dim}"
+
+                                   Margin="8,0,0,0" VerticalAlignment="Center" Text="—"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+            <TextBlock Grid.Row="1" Text="Меняется и сохраняется сразу. Осторожные вещи — только с флагом «Экспериментальное»."
+
+                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                       Margin="0,8,0,0" TextWrapping="Wrap"/>
+
+
+
+            <!-- Две колонки на всю ширину -->
+
+            <Grid Grid.Row="2" Margin="0,16,0,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="*"/>
+
+                </Grid.ColumnDefinitions>
+
+
+
+                <StackPanel Grid.Column="0" Margin="0,0,6,0">
+
+                    <!-- Модель (LLM) -->
+
+                    <Border x:Name="LlmCard" Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <!-- 🆕 0.14.3: полоса статуса подключения LLM —
+                                 зелёная «ОК», красная «Ошибка», тихая —
+                                 проверки ещё не было. -->
+                            <Border x:Name="LlmStrip" Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE8BD;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Модель (LLM)" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Локальная (Ollama) или облачный OpenAI-совместимый API."
+
+                                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,8,0,12" TextWrapping="Wrap"/>
+
+                            <CheckBox x:Name="StrictPrivacyBox" Content="Строгая приватность"
+
+                                      Margin="0,0,0,12"
+
+                                      Checked="StrictPrivacy_Changed" Unchecked="StrictPrivacy_Changed"
+
+                                      ToolTip="ИИ не читает буфер обмена, история чата не сохраняется, лог стирается при выходе."/>
+
+                            <TextBlock Text="Провайдер:" FontSize="12" Foreground="{DynamicResource B_Muted}"/>
+
+                            <ComboBox x:Name="ProviderBox" Margin="0,4,0,10" Height="34"
+
+                                      SelectionChanged="ProviderBox_Changed">
+
+                                <ComboBoxItem Content="Ollama (локально)"/>
+
+                                <ComboBoxItem Content="OpenAI-совместимый"/>
+
+                            </ComboBox>
+
+                            <TextBlock x:Name="BaseUrlLabel" Text="Base URL:" FontSize="12" Foreground="{DynamicResource B_Muted}"/>
+
+                            <TextBox x:Name="BaseUrlBox" Margin="0,4,0,10" Height="34"/>
+
+                            <TextBlock x:Name="ApiKeyLabel" Text="API-ключ:" FontSize="12" Foreground="{DynamicResource B_Muted}"/>
+
+                            <TextBox x:Name="ApiKeyBox" Margin="0,4,0,10" Height="34"/>
+
+                            <TextBlock Text="Модель:" FontSize="12" Foreground="{DynamicResource B_Muted}"/>
+
+                            <TextBox x:Name="ModelBox" Margin="0,4,0,14" Height="34"/>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Content="Сохранить" MinWidth="140" Height="36"
+
+                                        Background="{DynamicResource B_Accent}" Foreground="White"
+
+                                        BorderThickness="0" Click="Save_Click"/>
+
+                                <Border Width="8"/>
+
+                                <Button x:Name="TestLlmBtn" Content="Проверить подключение"
+
+                                        MinWidth="200" Height="36" Click="TestLlm_Click"/>
+
+                            </StackPanel>
+
+                            <TextBlock x:Name="LlmStatus" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+                            <Button Content="Сбросить к Ollama" Height="30" Margin="0,8,0,0"
+
+                                    HorizontalAlignment="Left" Padding="12,0"
+
+                                    Background="Transparent" BorderThickness="0"
+
+                                    Click="ModelReset_Click"
+
+                                    ToolTip="Вернуть адрес, ключ и модель Ollama по умолчанию."/>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Вид -->
+
+                    <Border x:Name="AppearanceCard" Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE9F5;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Вид" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Эффекты" FontFamily="{DynamicResource F_Ui}" FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,12,0,0"/>
+
+                            <StackPanel Margin="0,6,0,0">
+
+                                <Button x:Name="FxAutoBtn" Tag="fx0" Margin="0,0,0,8" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="FxCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Авто" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock x:Name="FxAutoDesc" Text="Пороги: слабое железо/запрет анимаций — минимум, батарея — обычные, иначе максимум" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="FxAutoPill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                                <Button x:Name="FxMinBtn" Tag="fx1" Margin="0,0,0,8" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="FxCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE9F5;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Минимум" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock Text="Плоско и быстро: без свечения, сетки и анимаций" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="FxMinPill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                                <Button x:Name="FxNormBtn" Tag="fx2" Margin="0,0,0,8" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="FxCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE7F8;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Обычные" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock Text="Красиво и спокойно" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="FxNormPill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                                <Button x:Name="FxMaxBtn" Tag="fx3" Margin="0,0,0,0" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="FxCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE3E7;" FontFamily="{StaticResource F_Icon}" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Максимум" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock Text="Все соки: аура-фон, свечение, RGB, анимации" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="FxMaxPill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Интерфейс" FontFamily="{DynamicResource F_Ui}" FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,14,0,0"/>
+
+                            <StackPanel Margin="0,6,0,0">
+
+                                <Button x:Name="UiSimpleBtn" Tag="ui0" Margin="0,0,0,8" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="UiCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE8BD;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Простой" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock Text="Укрупнённое меню: крупные кнопки и простые слова" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="UiSimplePill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                                <Button x:Name="UiAdvBtn" Tag="ui1" Margin="0,0,0,0" Padding="12,10"
+
+                                        HorizontalContentAlignment="Stretch" Click="UiCard_Click">
+
+                                    <Grid>
+
+                                        <Grid.ColumnDefinitions>
+
+                                            <ColumnDefinition Width="30"/>
+
+                                            <ColumnDefinition Width="*"/>
+
+                                            <ColumnDefinition Width="Auto"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                                   Foreground="{DynamicResource B_Accent}"
+
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+
+                                            <TextBlock Text="Расширенный" FontFamily="{DynamicResource F_Ui}" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Text}"/>
+
+                                            <TextBlock Text="Всё + экспериментальные функции" FontSize="11"
+
+                                                       Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"/>
+
+                                        </StackPanel>
+
+                                        <TextBlock x:Name="UiAdvPill" Grid.Column="2" Text="○" FontSize="16"
+
+                                                   Foreground="{DynamicResource B_Muted}"
+
+                                                   VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                                    </Grid>
+
+                                </Button>
+
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Шрифт интерфейса -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE8D2;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Шрифт" FontFamily="{DynamicResource F_Ui}" FontSize="15" Margin="10,0,0,0"
+
+                                           Foreground="{DynamicResource B_Text}" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Основной шрифт интерфейса: применяется ко всему тексту, включая заголовки." FontSize="11"
+
+                                       Foreground="{DynamicResource B_Muted}" Margin="0,6,0,0"/>
+
+                            <UniformGrid Columns="4" Margin="0,10,0,0">
+
+                                <Button Tag="font0" Click="Font_Click" Margin="0,0,6,0"
+
+                                        Padding="8,6" HorizontalContentAlignment="Center">
+
+                                    <StackPanel>
+
+                                        <TextBlock Text="Аа Привет" FontFamily="{StaticResource F_Pixel}" FontSize="9"
+
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource B_Text}"/>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                                            <TextBlock x:Name="Font0Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                       Foreground="{DynamicResource B_Muted}"/>
+
+                                            <TextBlock Text="Ретро" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="font1" Click="Font_Click" Margin="0,0,6,0"
+
+                                        Padding="8,6" HorizontalContentAlignment="Center">
+
+                                    <StackPanel>
+
+                                        <TextBlock Text="Аа Привет" FontFamily="Segoe UI" FontSize="12"
+
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource B_Text}"/>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                                            <TextBlock x:Name="Font1Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                       Foreground="{DynamicResource B_Muted}"/>
+
+                                            <TextBlock Text="Segoe UI" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="font2" Click="Font_Click" Margin="0,0,6,0"
+
+                                        Padding="8,6" HorizontalContentAlignment="Center">
+
+                                    <StackPanel>
+
+                                        <TextBlock Text="Аа Привет" FontFamily="Bahnschrift" FontSize="13"
+
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource B_Text}"/>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                                            <TextBlock x:Name="Font2Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                       Foreground="{DynamicResource B_Muted}"/>
+
+                                            <TextBlock Text="Bahnschrift" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="font3" Click="Font_Click"
+
+                                        Padding="8,6" HorizontalContentAlignment="Center">
+
+                                    <StackPanel>
+
+                                        <TextBlock Text="Аа Привет" FontFamily="Trebuchet MS" FontSize="12"
+
+                                                   HorizontalAlignment="Center" Foreground="{DynamicResource B_Text}"/>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+
+                                            <TextBlock x:Name="Font3Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                       Foreground="{DynamicResource B_Muted}"/>
+
+                                            <TextBlock Text="Trebuchet MS" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                            </UniformGrid>
+
+                            <TextBlock x:Name="FontStatus" FontSize="11" Margin="0,8,0,0"
+
+                                       Foreground="{DynamicResource B_Muted}"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Масштаб -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE740;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Масштаб" FontFamily="{DynamicResource F_Ui}" FontSize="15" Margin="10,0,0,0"
+
+                                           Foreground="{DynamicResource B_Text}" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Размер интерфейса целиком — применяется сразу." FontSize="11"
+
+                                       Foreground="{DynamicResource B_Muted}" Margin="0,6,0,0"/>
+
+                            <UniformGrid Columns="4" Margin="0,10,0,0">
+
+                                <Button Tag="sc75" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc75Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="75%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc80" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc80Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="80%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc85" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc85Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="85%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc90" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc90Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="90%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc100" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc100Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="100%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc110" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc110Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="110%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc125" Click="Scale_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc125Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="125%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Tag="sc150" Click="Scale_Click"
+
+                                        Padding="8,8" HorizontalContentAlignment="Center">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock x:Name="Sc150Pill" Text="○" FontSize="12" Margin="0,0,6,0"
+
+                                                   Foreground="{DynamicResource B_Muted}"/>
+
+                                        <TextBlock Text="150%" FontSize="11" Foreground="{DynamicResource B_Dim}"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                            </UniformGrid>
+
+                            <TextBlock x:Name="ScaleStatus" FontSize="11" Margin="0,8,0,0"
+
+                                       Foreground="{DynamicResource B_Muted}"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Персонализация -->
+
+                    <Border x:Name="ThemeCard" Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE790;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Персонализация" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Пресет сразу меняет акцент, фон и панели — видно во всех экранах."
+
+                                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,12,0,0" TextWrapping="Wrap"/>
+
+                            <UniformGrid Columns="5" Margin="0,8,0,0">
+
+                                <Button x:Name="Theme0Btn" Tag="th0" Click="Theme_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Left">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Border x:Name="Theme0Swatch" Width="14" Height="14"
+
+                                                BorderBrush="{DynamicResource B_Border}" BorderThickness="1"/>
+
+                                        <TextBlock x:Name="Theme0Pill" Text="Фиолет" FontSize="11"
+
+                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button x:Name="Theme1Btn" Tag="th1" Click="Theme_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Left">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Border x:Name="Theme1Swatch" Width="14" Height="14"
+
+                                                BorderBrush="{DynamicResource B_Border}" BorderThickness="1"/>
+
+                                        <TextBlock x:Name="Theme1Pill" Text="Хакер" FontSize="11"
+
+                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button x:Name="Theme2Btn" Tag="th2" Click="Theme_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Left">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Border x:Name="Theme2Swatch" Width="14" Height="14"
+
+                                                BorderBrush="{DynamicResource B_Border}" BorderThickness="1"/>
+
+                                        <TextBlock x:Name="Theme2Pill" Text="Океан" FontSize="11"
+
+                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button x:Name="Theme3Btn" Tag="th3" Click="Theme_Click" Margin="0,0,6,0"
+
+                                        Padding="8,8" HorizontalContentAlignment="Left">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Border x:Name="Theme3Swatch" Width="14" Height="14"
+
+                                                BorderBrush="{DynamicResource B_Border}" BorderThickness="1"/>
+
+                                        <TextBlock x:Name="Theme3Pill" Text="Закат" FontSize="11"
+
+                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button x:Name="Theme4Btn" Tag="th4" Click="Theme_Click"
+
+                                        Padding="8,8" HorizontalContentAlignment="Left">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Border x:Name="Theme4Swatch" Width="14" Height="14"
+
+                                                BorderBrush="{DynamicResource B_Border}" BorderThickness="1"/>
+
+                                        <TextBlock x:Name="Theme4Pill" Text="Снег" FontSize="11"
+
+                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                            </UniformGrid>
+
+                            <TextBlock Text="Свой цвет (HEX, например #7C6CF0):" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}" Margin="0,12,0,0"/>
+
+                            <Grid Margin="0,6,0,0">
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="8"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="8"/>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="8"/>
+
+                                    <ColumnDefinition Width="Auto"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="AccentBox" Grid.Column="0" Height="34" MaxLength="7"
+
+                                         ToolTip="Акцент: кнопки, свечения, рамки."/>
+
+                                <TextBox x:Name="BgBox" Grid.Column="2" Height="34" MaxLength="7"
+
+                                         ToolTip="Фон главный."/>
+
+                                <TextBox x:Name="PanelBox" Grid.Column="4" Height="34" MaxLength="7"
+
+                                         ToolTip="Фон карточек."/>
+
+                                <Button x:Name="ThemeApplyBtn" Grid.Column="6" Content="Применить"
+
+                                        MinWidth="110" Height="34" Click="ThemeApply_Click"/>
+
+                            </Grid>
+
+                            <TextBlock x:Name="ThemeStatus" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,8,0,0" TextWrapping="Wrap"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Экспериментальное -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE950;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Экспериментальное" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock x:Name="ExpHint" Text="Удаление файлов, очистка Temp, завершение процессов. Могут глючить."
+
+                                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,8,0,12" TextWrapping="Wrap"/>
+
+                            <CheckBox x:Name="ExpBox" Content="Включить фишки"
+
+                                      Checked="ExpBox_Checked" Unchecked="ExpBox_Unchecked"/>
+
+                            <StackPanel x:Name="ExpConfirm" Visibility="Collapsed" Margin="0,12,0,0">
+
+                                <TextBlock Text="Напечатай ВКЛЮЧИТЬ для подтверждения:"
+
+                                           FontSize="12" Foreground="{DynamicResource B_Muted}"/>
+
+                                <TextBox x:Name="ExpText" Margin="0,6,0,8" Height="34"
+
+                                         TextChanged="ExpText_Changed"/>
+
+                                <Button x:Name="ExpOk" Content="Включить" MinWidth="140" Height="36"
+
+                                        IsEnabled="False"
+
+                                        Background="#CF352F" Foreground="White" BorderThickness="0"
+
+                                        Click="ExpOk_Click"/>
+
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Запуск -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Запуск" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <CheckBox x:Name="AutostartBox" Content="Запускать вместе с Windows"
+
+                                      Margin="0,12,0,0"
+
+                                      Checked="Autostart_Changed" Unchecked="Autostart_Changed"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+
+
+                <StackPanel Grid.Column="1" Margin="6,0,0,0">
+
+                    <!-- Автопорядок -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE8CB;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Автопорядок" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Работает в фоне, пока открыт Пульт. Итог — в app.log."
+
+                                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,8,0,0" TextWrapping="Wrap"/>
+
+                            <CheckBox x:Name="AutoOrgBox" Content="Сортировать файлы по расписанию"
+
+                                      Margin="0,12,0,0"
+
+                                      Checked="AutoOrg_Changed" Unchecked="AutoOrg_Changed"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+                                <TextBlock Text="Как часто:" FontSize="12"
+
+                                           Foreground="{DynamicResource B_Muted}"
+
+                                           VerticalAlignment="Center"/>
+
+                                <ComboBox x:Name="IntervalBox" Width="120" Height="32" Margin="10,0,0,0"
+
+                                          SelectionChanged="Interval_Changed">
+
+                                    <ComboBoxItem Content="15 мин"/>
+
+                                    <ComboBoxItem Content="30 мин"/>
+
+                                    <ComboBoxItem Content="60 мин"/>
+
+                                    <ComboBoxItem Content="120 мин"/>
+
+                                    <ComboBoxItem Content="240 мин"/>
+
+                                </ComboBox>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Какие папки разбирать:" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}" Margin="0,12,0,0"/>
+
+                            <ListBox x:Name="OrgDirsList" Margin="0,6,0,10" MinHeight="60"/>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Content="+ Папка" MinWidth="110" Height="34"
+
+                                        Click="OrgAddDir_Click"/>
+
+                                <Border Width="8"/>
+
+                                <Button Content="Убрать" MinWidth="110" Height="34"
+
+                                        Background="Transparent" BorderThickness="0"
+
+                                        Click="OrgRemoveDir_Click"/>
+
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Папки с играми -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE8F4;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Папки с играми" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <ListBox x:Name="DirsList" Margin="0,12,0,10" MinHeight="60"/>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Content="+ Папка" MinWidth="110" Height="34"
+
+                                        Click="AddDir_Click"/>
+
+                                <Border Width="8"/>
+
+                                <Button Content="Убрать" MinWidth="110" Height="34"
+
+                                        Background="Transparent" BorderThickness="0"
+
+                                        Click="RemoveDir_Click"/>
+
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- Диагностика и бэкап -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16" Margin="0,0,0,12">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="Диагностика и бэкап" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock Text="Лог пишется в app.log. Диагностика — для отправки при ошибке."
+
+                                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,8,0,12" TextWrapping="Wrap"/>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <Button Content="Скопировать диагностику" MinWidth="230" Height="34"
+
+                                        Click="DiagCopy_Click"/>
+
+                                <Border Width="8"/>
+
+                                <Button Content="Открыть лог" MinWidth="130" Height="34"
+
+                                        Click="OpenLog_Click"
+
+                                        ToolTip="Открыть app.log в блокноте."/>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+
+                                <Button Content="Экспорт настроек" MinWidth="170" Height="34"
+
+                                        Click="SettingsExport_Click"/>
+
+                                <Border Width="8"/>
+
+                                <Button Content="Импорт" MinWidth="110" Height="34"
+
+                                        Click="SettingsImport_Click"/>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+
+                                <Button Content="Открыть историю изменений" MinWidth="230" Height="34"
+
+                                        Click="HistoryOpen_Click"
+
+                                        ToolTip="Журнал: что менялось и кнопка «Отменить»."/>
+
+                                <Border Width="8"/>
+
+                                <Button Content="Папка данных" MinWidth="150" Height="34"
+
+                                        Click="OpenData_Click"
+
+                                        ToolTip="Папка данных: настройки, журналы, бэкапы."/>
+
+                            </StackPanel>
+
+                            <TextBlock x:Name="BackupStatus" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                    <!-- О программе -->
+
+                    <Border Background="{DynamicResource B_Card}" BorderBrush="{DynamicResource B_Border}"
+
+                            BorderThickness="2" Padding="20,16">
+
+                        <StackPanel>
+
+                            <Border Background="{DynamicResource B_Bar}" Height="2" Width="200"
+
+                                    HorizontalAlignment="Center" Margin="0,-14,0,12"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                                <Border Background="{DynamicResource B_Soft}" Width="36" Height="36"
+
+                                        BorderBrush="{DynamicResource B_Accent}" BorderThickness="1">
+
+                                    <TextBlock Text="&#xE933;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+
+                                               Foreground="{DynamicResource B_Accent}"
+
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <TextBlock Text="О программе" FontFamily="{DynamicResource F_Ui}"
+
+                                           FontSize="11" Foreground="{DynamicResource B_Text}"
+
+                                           Margin="12,0,0,0" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                            <TextBlock x:Name="AppVersionText" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Dim}"
+
+                                       Margin="0,12,0,0" Text="Пульт"/>
+
+                            <TextBlock Text="Лицензия MIT." FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,4,0,0"/>
+
+                            <TextBlock x:Name="DataPathText" FontSize="12"
+
+                                       Foreground="{DynamicResource B_Muted}"
+
+                                       Margin="0,4,0,10" TextWrapping="Wrap"/>
+
+                            <Button Content="Патчи" MinWidth="140" Height="34" Margin="0,8,0,0"
+
+                                     HorizontalAlignment="Left" Click="Patches_Click"
+
+                                     ToolTip="Что менялось по версиям."/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+
+    </ScrollViewer>
+
+</UserControl>
+
+
+
+

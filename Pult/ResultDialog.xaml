@@ -1,0 +1,89 @@
+﻿<Window x:Class="Pult.ResultDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Результат" Width="560" Height="420"
+        MinWidth="460" MinHeight="240"
+        Background="{DynamicResource B_Border}"
+        WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterOwner" Topmost="True"
+        AllowsTransparency="True"
+        ShowInTaskbar="False">
+    <!-- Безрамочный диалог как в питоне: своя тёмная шапка, таскание за неё -->
+    <Grid TextElement.FontFamily="{DynamicResource F_Ui}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{DynamicResource B_Bg}"
+                BorderBrush="{DynamicResource B_Border}" BorderThickness="0,0,0,1"
+                MouseLeftButtonDown="Titlebar_Drag">
+            <Grid Margin="8,0,4,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TitleLabel" FontFamily="{DynamicResource F_Ui}"
+                           FontSize="9" Foreground="{DynamicResource B_Dim}"
+                           VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="✕" Width="36" Height="28"
+                        Background="Transparent" BorderThickness="0"
+                        Foreground="{DynamicResource B_Muted}" Cursor="Hand"
+                        Click="Close_Click"/>
+            </Grid>
+        </Border>
+        <Border x:Name="BodyBorder" Grid.Row="1" Background="{DynamicResource B_Bg}" Margin="1,0,1,1"
+                Padding="24,18,24,20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,14">
+                    <Border Background="{DynamicResource B_Tile}" Width="52" Height="52"
+                            BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1">
+                        <TextBlock x:Name="HeaderGlyph" FontFamily="Segoe MDL2 Assets"
+                                   FontSize="24" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource B_Accent}"/>
+                    </Border>
+                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock x:Name="HeaderLabel" FontFamily="{DynamicResource F_Ui}"
+                                   FontSize="13" Foreground="{DynamicResource B_Text}"/>
+                        <TextBlock x:Name="StatusLabel" FontSize="12"
+                                   Foreground="{DynamicResource B_Muted}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Row="1" Background="{DynamicResource B_Card}"
+                        BorderBrush="{DynamicResource B_Border}" BorderThickness="1"
+                        Padding="14,12">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBox x:Name="BodyBox" IsReadOnly="True" BorderThickness="0"
+                                 Background="Transparent" Foreground="{DynamicResource B_Dim}"
+                                 FontFamily="Consolas" FontSize="13" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+                </Border>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,14,0,0">
+                    <Button Content="Копировать" Padding="16,0" Height="38"
+                            Background="Transparent" Foreground="{DynamicResource B_Muted}"
+                            BorderThickness="0" Cursor="Hand" Click="Copy_Click"/>
+                    <Border Width="12"/>
+                    <Button x:Name="ActionButton" Visibility="Collapsed" Height="38"
+                            Padding="16,0" Cursor="Hand"
+                            Background="{DynamicResource B_Accent}"
+                            Foreground="White" BorderThickness="0"
+                            Click="Action_Click"/>
+                    <Border Width="12"/>
+                    <Button Content="Закрыть" MinWidth="100" Height="38"
+                            Background="{DynamicResource B_Tile}"
+                            Foreground="{DynamicResource B_Text}"
+                            BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1"
+                            Cursor="Hand" Click="Close_Click"
+                            HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+
+

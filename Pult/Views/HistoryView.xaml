@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Pult.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
+             TextOptions.TextRenderingMode="ClearType">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Background="Transparent">
+        <StackPanel Margin="24,20,24,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="История" FontFamily="{DynamicResource F_Ui}"
+                           FontSize="15" Foreground="{DynamicResource B_Text}"
+                           VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="RestoreBtn" Content="Точка восстановления" Height="34"
+                            Padding="12,0" Click="Restore_Click"
+                            ToolTip="Создать точку восстановления Windows (долго, до 3 мин)."/>
+                    <Button Content="Обновить" MinWidth="140" Height="34" Margin="8,0,0,0"
+                            Click="Refresh_Click" ToolTip="Перечитать журнал."/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="Каждое изменение — твик, приватность, питание, автозагрузка — пишется как «было → стало». Откат — кнопкой справа."
+                       FontSize="12" Foreground="{DynamicResource B_Muted}"
+                       TextWrapping="Wrap" Margin="0,12,0,0"/>
+            <TextBlock x:Name="RestoreStatus" FontSize="12"
+                       Foreground="{DynamicResource B_Dim}"
+                       TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"/>
+
+            <StackPanel x:Name="EntriesPanel" Margin="0,12,0,0"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+
+

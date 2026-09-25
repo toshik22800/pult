@@ -1,0 +1,258 @@
+﻿<Window x:Class="Pult.AdminGate"
+
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+        Title="Пульт" Width="560" Height="440"
+
+        Background="{DynamicResource B_Border}"
+
+        WindowStyle="None" ResizeMode="NoResize"
+
+        WindowStartupLocation="CenterScreen" Topmost="True"
+
+        AllowsTransparency="True"
+
+        ShowInTaskbar="False"
+
+        PreviewKeyDown="Key_Press">
+
+    <Window.Resources>
+
+        <!-- Акцентная кнопка основного действия: гасится по прозрачности,
+
+             а не уходит в тёмный ховер дефолтного стиля. -->
+
+        <Style x:Key="AccentBtn" TargetType="Button">
+
+            <Setter Property="Background" Value="{DynamicResource B_Accent}"/>
+
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="FontSize" Value="13"/>
+
+            <Setter Property="Padding" Value="18,0"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border Background="{TemplateBinding Background}"
+
+                                Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Style.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="True">
+
+                    <Setter Property="Opacity" Value="0.88"/>
+
+                </Trigger>
+
+                <Trigger Property="IsPressed" Value="True">
+
+                    <Setter Property="Opacity" Value="0.74"/>
+
+                </Trigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+    </Window.Resources>
+
+
+
+    <Grid TextElement.FontFamily="{DynamicResource F_Ui}" Margin="1">
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="36"/>
+
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+
+
+        <Border Grid.Row="0" Background="{DynamicResource B_Bg}"
+
+                BorderBrush="{DynamicResource B_Border}" BorderThickness="0,0,0,1"
+
+                MouseLeftButtonDown="Titlebar_Drag">
+
+            <Grid Margin="12,0,4,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                    <Ellipse Width="6" Height="6" Fill="#F85149" VerticalAlignment="Center"/>
+
+                    <TextBlock Text="RESTRICTED" FontSize="9" Foreground="{DynamicResource B_Dim}"
+
+                               Margin="8,0,0,0" VerticalAlignment="Center"/>
+
+                </StackPanel>
+
+                <Button Grid.Column="1" Content="&#x2715;" Width="36" Height="28"
+
+                        Background="Transparent" BorderThickness="0"
+
+                        Foreground="{DynamicResource B_Muted}" Cursor="Hand"
+
+                        Click="Exit_Click"/>
+
+            </Grid>
+
+        </Border>
+
+
+
+        <Border Grid.Row="1" Background="{DynamicResource B_Bg}"
+
+                BorderBrush="#F85149" BorderThickness="1" Padding="30,24">
+
+            <StackPanel VerticalAlignment="Center">
+
+                <Border x:Name="Shield" Width="64" Height="64" CornerRadius="32"
+
+                        Background="{DynamicResource B_Tile}"
+
+                        BorderBrush="#F85149" BorderThickness="1"
+
+                        HorizontalAlignment="Center">
+
+                    <TextBlock Text="&#xE72E;" FontFamily="Segoe MDL2 Assets"
+
+                               FontSize="26" Foreground="#F85149"
+
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                </Border>
+
+
+
+                <TextBlock Text="Нужны права администратора" FontSize="16"
+
+                           Foreground="{DynamicResource B_Text}"
+
+                           HorizontalAlignment="Center" Margin="0,14,0,0"/>
+
+                <TextBlock Text="Пульт управляет службами, драйверами и системными настройками — без прав это не работает."
+
+                           FontSize="12" Foreground="{DynamicResource B_Dim}"
+
+                           TextWrapping="Wrap" TextAlignment="Center"
+
+                           MaxWidth="420" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+
+
+
+                <Grid Margin="0,18,0,0">
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="Auto"/>
+
+                        <ColumnDefinition Width="*"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                    </Grid.RowDefinitions>
+
+                    <Ellipse Width="6" Height="6" Fill="#F85149" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                               Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"
+
+                               Text="Службы, датчики и драйверы — не оживут"/>
+
+                    <Ellipse Grid.Row="1" Width="6" Height="6" Fill="#F85149" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                               Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"
+
+                               Text="Твики Windows и чистка диска — недоступны"/>
+
+                    <Ellipse Grid.Row="2" Width="6" Height="6" Fill="{DynamicResource B_BorderH}"
+
+                             VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="12,0,0,0" FontSize="12"
+
+                               Foreground="{DynamicResource B_Muted}" TextWrapping="Wrap"
+
+                               Text="Без прав читать систему можно — в диспетчере задач"/>
+
+                </Grid>
+
+
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,22,0,0">
+
+                    <Button Content="Перезапустить как админ" Height="42" MinWidth="220"
+
+                            Style="{StaticResource AccentBtn}" Click="Restart_Click"/>
+
+                    <Button Content="Выйти" Height="42" MinWidth="110" Margin="10,0,0,0"
+
+                            Background="{DynamicResource B_Tile}" Foreground="{DynamicResource B_Text}"
+
+                            BorderBrush="{DynamicResource B_BorderH}" BorderThickness="1"
+
+                            Click="Exit_Click"/>
+
+                </StackPanel>
+
+
+
+                <TextBlock Text="Enter — перезапустить · Esc — выйти" FontSize="10"
+
+                           Foreground="{DynamicResource B_Muted}"
+
+                           HorizontalAlignment="Center" Margin="0,12,0,0"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+
+</Window>
+
