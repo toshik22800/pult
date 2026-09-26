@@ -33,7 +33,7 @@ jobs:
           -o publish/win-x64
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: pult-win-x64
           path: publish/win-x64/Pult.exe
