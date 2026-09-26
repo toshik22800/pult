@@ -54,7 +54,7 @@ WPF · C# · .NET 10 · всё локально.
 Требуется [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```powershell
-git clone https://github.com/<вы-тут>/pult.git
+git clone https://github.com/toshik22800/pult.git
 cd pult
 dotnet build Pult/Pult.csproj -c Release
 ```
