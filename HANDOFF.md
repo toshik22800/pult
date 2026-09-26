@@ -8,6 +8,46 @@
 
 ## Профильтровано по порядку (свежее сверху)
 
+### -9. Open-source пакет: MIT, EN README, CI, подпись коммитов (26.09)
+Без бампа версии — пакетизация репо по внешнему чек-листу, C# не тронут
+(конвейер §6 не требовался: правились только markdown/YAML/конфиг репо).
+- **LICENSE:** MIT © 2026 toshik22800 (выбор юзера, необратим).
+- **README:** `README.md` = EN-основа (бейдж CI, ⚠️-блок «Before you run»,
+  «What it does NOT do» / Network activity: none, «This is the original
+  project», Requirements/Download/Quality/License); `README.ru.md` = зеркало
+  (бывший RU + Загрузка, ⚠️-цитата, «Официальный проект», License).
+- **CI:** `.github/workflows/build.yml` (windows-latest, setup-dotnet 10.0.x,
+  Debug + Release + publish single-file + artifact) — ран `36230764768`
+  зелёный, 1m32s; badge в обоих README; actions на @v5 (v4 = Node20-warning).
+- **Шаблоны Issues:** `.github/ISSUE_TEMPLATE/` bug_report, feature_request,
+  config.yml (contact-link → Discussions); метки bug/enhancement созданы.
+- **CONTRIBUTING.md** (EN): сборка, конвейер BRIEF §6, кодировки, no-telemetry,
+  SSH-подпись, порядок PR.
+- **GitHub:** topics += tweaks/ollama/desktop-app; About homepage →
+  releases/latest; Discussions включён (`has_discussions=true`); SHA-256
+  ассета `cf3d14f5…cd20af7` вписан в релиз-ноты v0.14.5 (+секция Issues/
+  Discussions там же). Ранее в этом же цикле: раздел «Обратная связь» и ©
+  в README (коммит `7965c0f`).
+- **Подпись коммитов (SSH):** ed25519 `C:\Users\oleg\.ssh\id_ed25519`
+  (без пароля), ключ на GitHub добавлен тип signing → нужен scope
+  `admin:ssh_signing_key`: `gh auth refresh -s repo,workflow,admin:ssh_signing_key`
+  (device-flow ТОЛЬКО фоновым шеллом, код читать из лога). Git-конфиг:
+  `gpg.format=ssh`, `commit.gpgsign=true`, `user.signingkey=…\.pub`,
+  `gpg.ssh.allowedSignersFile=~\.ssh\allowed_signers` (без него
+  `git log --show-signature` показывает ложное «No signature», хотя
+  `gpgsig` в объекте есть!). Email коммитов:
+  `170280793+toshik22800@users.noreply.github.com` (привязка к профилю).
+  Проверка приёма: API `commit.verification` = `verified=true, reason=valid`
+  (коммит `2c5ee40`).
+- **Грабли:** ssh-keygen из PowerShell — только через .cmd-файл (пустой
+  аргумент-кавычки и `--%` ломают PS-парсер; mkdir папки `.ssh` — руками);
+  `gh api … --jq` с пробелами в PS расщепляет строку — читать JSON целиком
+  и фильтровать Select-String; пустые тест-коммиты под подписью удалять
+  `git reset --hard` (дерево не двигается).
+- **Осталось юзеру (я не могу):** demo GIF (ScreenToGif), посты Reddit/Habr,
+  PR в awesome-списки, Boosty-ссылка → `.github/FUNDING.yml` + бейдж,
+  social preview image (только веб-UI репо), домен/логотип, GPG-подпись
+  релизов (опционально).
 ### -8. Пакет 0.14.5: первые окна, фикс сохранения, инструменты, git (26.09)
 Детали в CHANGELOG 0.14.5. Версия `Pult.csproj` = 0.14.5, запись 0.14.5 в
 `ReleaseNotes.cs` (`IsCurrent`). Конвейер честно прогнал после бампа:
