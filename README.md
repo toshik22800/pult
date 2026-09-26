@@ -65,14 +65,16 @@ dotnet build Pult/Pult.csproj -c Release
 dotnet run --project Pult/Pult.csproj -c Release
 ```
 
-Самодостаточный релиз (одна папка, .NET не нужен на машине того, кому
-кидаешь):
+Самодостаточный релиз — один файл `Pult.exe` (не нужен .NET на машине того,
+кому кидаешь):
 
 ```powershell
-dotnet publish Pult/Pult.csproj -c Release -r win-x64 --self-contained true -o publish/win-x64
+dotnet publish Pult/Pult.csproj -c Release -r win-x64 --self-contained true `
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
+  -o publish/win-x64
 ```
 
-Готовый `publish/win-x64` запаковывается в zip и кладётся в GitHub Release —
+`publish/win-x64/Pult.exe` запаковывается в zip и кладётся в GitHub Release —
 ссылку на него можно скинуть в чат.
 
 При первом запуске покажется гейт «Нужны права администратора» (для части
