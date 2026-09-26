@@ -65,6 +65,29 @@ breathe-s `barOp 0.505..0.992`, `glintX −84..192`.
   SizeBytes (BG3 155ГБ, GoreBox v27b 861МБ, GoreBox27 993МБ, Roblox
   351МБ, total 157566301556); CONTENT-чек games теперь читает
   `render_live-games.png` (21412 пикселей).
+- **GitHub (сделано):** аккаунт **toshik22800**, публичное репо
+  https://github.com/toshik22800/pult (описание + топики заданы),
+  коммиты `f819248` → `298108d` → `a6968a6` → `f944f91` запушены.
+  Логин gh — device-flow ТОЛЬКО фоновым шеллом (Start-Process + файловый
+  stdin убивали gh вместе с командой / по EOF — код печатался, токен не
+  записывался). Пушу только после закрытия волны (порядок юзера).
+- **Байт-точность blob'ов после пуша:** `check_blob.py` (git show →
+  байты напрямую, без редиректов PowerShell — те режут в UTF-16!):
+  SimpleHomeView = 12690 байт, BOM+CRLF, crcrlf=0 — PASS.
+- **Релиз-артефакт:** `dotnet publish -c Release -r win-x64
+  --self-contained true -p:PublishSingleFile=true
+  -p:IncludeNativeLibrariesForSelfExtract=true -o publish/win-x64` →
+  единый `Pult.exe` 138.8МБ (FileVersion 0.14.5.0) → zip 58.4МБ
+  (`temp/opencode/pult-0.14.5-win-x64.zip`); та же команда продублирована
+  в README. Смоук ДО публикации: запуск под `APPDATA=advdata` + охота за
+  окном `shot_win.py` (первый запуск бандла распаковывает нативные
+  библиотеки — 8с мало, `MainWindowTitle` у WPF-диалога пустой; ждать
+  окно до 40с и проверять exit шот-скрипта — фактически окно появляется
+  за ~0.8с, а `MainWindowTitle` честной проверкой не является).
+- **Релиз опубликован:** https://github.com/toshik22800/pult/releases/tag/v0.14.5
+  — тег `v0.14.5`, ассет `pult-0.14.5-win-x64.zip` (58.4МБ, один
+  Pult.exe), ноты — `release_notes_v0145.txt` (как запустить + что
+  нового + «пишите в Issues»).
 
 ### -7. Пакет 0.14.4: Sys B приборная стена + Chat 3 страница-ответ (25.09)
 Скетчи одобрены → закрыты; детали в CHANGELOG 0.14.4. Версия
