@@ -44,6 +44,17 @@
   `gh api … --jq` с пробелами в PS расщепляет строку — читать JSON целиком
   и фильтровать Select-String; пустые тест-коммиты под подписью удалять
   `git reset --hard` (дерево не двигается).
+- **Скриншот журнала («козырь» чек-листа):** `docs/render_history.png` —
+  рендер `live-history` (`render_adv.py`, BASE-пины run_renders). ВАЖНО:
+  ActionJournal читает РЕАЛЬНЫЙ роуминг (`Environment.GetFolderPath`, а не
+  APPDATA!) — подсадка `advdata/Pult/actions.json` в кадр не попадает,
+  все прошлые рендеры показывали настоящий журнал (все записи info/без
+  отката). Юзер сам щёлкнул твики (2 записи ПРИВАТНОСТЬ с кнопкой
+  «Отменить» + info-откат), путь `C:\Users\oleg\Downloads` замазан
+  `mask_history.py` (детект карточек по цвету, заливка цветом карточки,
+  путь = последний текст-прогон detail-полосы). Канон
+  `render_live-history.png` восстановлен байт-в-байт (CANON OK),
+  настройки юзера не тронуты (render_adv сам это контролирует).
 - **Осталось юзеру (я не могу):** demo GIF (ScreenToGif), посты Reddit/Habr,
   PR в awesome-списки, Boosty-ссылка → `.github/FUNDING.yml` + бейдж,
   social preview image (только веб-UI репо), домен/логотип, GPG-подпись

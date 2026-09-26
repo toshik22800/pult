@@ -23,6 +23,12 @@ WPF · C# · .NET 10 · open source.
 - **Widget** — clock and system load on top of other windows.
 - **Settings** — model & endpoint, effects (Auto/Low/Normal/Max), UI density, 4 theme presets + custom HEX colors, scale, game folders, diagnostics, backup.
 
+### Journal with undo
+
+Every system-changing action is recorded as «was → became» — and most roll back with one click:
+
+![Journal with undo](docs/render_history.png)
+
 ## Requirements
 
 - Windows 10 / 11, x64.
