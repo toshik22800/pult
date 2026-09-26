@@ -8,6 +8,64 @@
 
 ## Профильтровано по порядку (свежее сверху)
 
+### -8. Пакет 0.14.5: первые окна, фикс сохранения, инструменты, git (26.09)
+Детали в CHANGELOG 0.14.5. Версия `Pult.csproj` = 0.14.5, запись 0.14.5 в
+`ReleaseNotes.cs` (`IsCurrent`). Конвейер честно прогнал после бампа:
+Debug/Release/стенд 0/0/0, `check_014` 11/11, `verify_renders` 15/15,
+аудиты **8×exit=0** (в `audit_report.txt`), `clip_check` fails=0,
+`fontclick` 13/13, `fxswitch` fails=0 (12 PASS), `auto` 16/16 спек
+(run_live: 21 PASS/0 FAIL — счётчик лог+консоль); живость: breathe
+`heroOp 0.302..0.995`, `heroX −109..260`, `cardOp 0.353..0.999`;
+breathe-s `barOp 0.505..0.992`, `glintX −84..192`.
+- **Код:** WelcomeWizard (мастер 3 шага, ShowStep(int,bool) приватный),
+  AdminGate (щит-пульс), `Appearance.ApplyScale(Window, double minScale)`
+  перегрузка, `AppSettings.JsonOpts` (AllowNamedFloatingPointLiterals —
+  NaN-координаты виджета роняли запись, Save() молчал → мастер
+  возвращался каждый запуск). Кодировки: WelcomeWizard/AdminGate.xaml =
+  UTF-8 BOM + `\r\r\n` (нормализация `norm_dialogs.py`), их .cs и
+  `AppSettings.cs` = без BOM, чистый LF.
+- **Git/публикация:** `git init -b main`, первый коммит `f819248` (77
+  файлов), push НЕ делался. Байт-точность: `.gitattributes` (`* -text`) +
+  repo-local `core.autocrlf=false`/`core.eol=lf`. GitHub: публичное репо
+  **pult**, аутентификация — gh CLI (портативный
+  `temp/opencode/gh/gh.exe`, БЕЗ GCM; device-flow протухает — логинить
+  в момент пуша и код показывать юзеру). Перед пушом — повторный
+  `secret_scan.py` (в прошлый раз 81 файл, 0 хитов).
+- **Инструменты (temp/opencode):** восстановлены `render_adv` (переключён
+  на отдельный каталог рендера `temp/opencode/advdata` — раньше делил
+  APPDATA с играми; сдвиг из `dir` убран, префиксы суффиксов отменены —
+  схема имён файлов как вручную), 7 аудитов по контрактам HANDOFF §−1/
+  BRIEF §6, `run_audits` теперь 8 скриптов (added `audit_newnl`,
+  `check_my_xml`) → `audit_report.txt`.
+- **ЛОВУШКА рендера (не откатывать):** `render_adv --adv` (свежая копия
+  settings) и сидер `games_seed --adv` (кэш игр) — **два разных
+  процесса/слоя**: совмещение в одном запуске пропускает reseed
+  (каталоги настроек и игр — разные, но только один процесс может
+  работать с APPDATA за раз). `EXTRA APPDATA` (игры/кэш) — отдельный
+  слой от `advdata` (настроек).
+- **`wizshow` (харнесс первых окон):** Show() + DispatcherFrame-насос,
+  шаги — рефлексией `ShowStep`, handshake-файл `wizshow_ack.txt`
+  («step N» → удалить), запуск ОБЯЗАТЕЛЬНО с `APPDATA=advdata`
+  (OnClosing мастера зовёт `TrySave` и пишет settings.json!).
+  **Завершение только `Environment.Exit` из тика:** выход через
+  `frame.Continue=false` зависал — диспетчер засыпал в WaitForOperation
+  и не пробуждался (мастер 35.7с, гейт 1.9–2.4с от пульса); с
+  `timer.Stop()` — вообще вечное ожидание. Драйвер `wizshow_run.py`
+  (снимки `shot_win.py`, отложка 2с на первый кадр). Скрины уже сняты →
+  `docs/wizard-step1..3.png`, `docs/admin-gate.png`.
+- **`audit_newnl` (новая истина по NL):** файл обязан быть одностильным
+  (CRLF/LF/CRCRLF), BOM опционален. Первая находка: `SimpleHomeView.xaml`
+  MIXED (BOM + 135 CRLF + 38 CRCRLF от дизайнера) → нормализован в
+  чистый CRLF (BOM сохранён, содержимое нетронуто) — MIXED: 0.
+  `norm_dialogs.py` этот файл не покрывает — конфликта нет.
+- **Пины BASE (единый источник — `run_renders.py`):** `Effects=3`,
+  `Interface=1`, `ExperimentalEnabled=False` — единственный способ
+  держать LIGHT и SECTIONS+bars одновременно (замерами).
+- **Кэш игр:** `games_seed` → `%APPDATA%\Pult\games.json` = 4 игры с
+  SizeBytes (BG3 155ГБ, GoreBox v27b 861МБ, GoreBox27 993МБ, Roblox
+  351МБ, total 157566301556); CONTENT-чек games теперь читает
+  `render_live-games.png` (21412 пикселей).
+
 ### -7. Пакет 0.14.4: Sys B приборная стена + Chat 3 страница-ответ (25.09)
 Скетчи одобрены → закрыты; детали в CHANGELOG 0.14.4. Версия
 `Pult.csproj` = 0.14.4, запись 0.14.4 в `ReleaseNotes.cs` (`IsCurrent`

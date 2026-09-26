@@ -1,25 +1,25 @@
-﻿<UserControl x:Class="Pult.Views.SimpleHomeView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             UseLayoutRounding="True" SnapsToDevicePixels="True"
-             TextOptions.TextRenderingMode="ClearType">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
-                  Background="Transparent">
+﻿<UserControl x:Class="Pult.Views.SimpleHomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
+             TextOptions.TextRenderingMode="ClearType">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                  Background="Transparent">
         <StackPanel Margin="28,24,28,32">
             <TextBlock Text="Главная" FontFamily="{DynamicResource F_Ui}"
                        FontSize="24" Foreground="{DynamicResource B_Accent}"/>
 
             <!-- Пульс: здоровье одним числом + история -->
             <Grid Margin="0,16,0,0">
-                <Border x:Name="PulseGlowFrame" Background="Transparent"
-                        BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
-                        IsHitTestVisible="False"/>
-                <Border x:Name="PulseCard" Style="{StaticResource SimpleActionCard}"
-                    Background="{DynamicResource B_Card}"
-                    BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
-                    Padding="0" Margin="0" Cursor="Hand"
-                    MouseLeftButtonUp="Pulse_Click"
-                    ToolTip="Что входит в оценку — кликни.">
+                <Border x:Name="PulseGlowFrame" Background="Transparent"
+                        BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+                        IsHitTestVisible="False"/>
+                <Border x:Name="PulseCard" Style="{StaticResource SimpleActionCard}"
+                    Background="{DynamicResource B_Card}"
+                    BorderBrush="{DynamicResource B_Border}" BorderThickness="2"
+                    Padding="0" Margin="0" Cursor="Hand"
+                    MouseLeftButtonUp="Pulse_Click"
+                    ToolTip="Что входит в оценку — кликни.">
                 <Grid Margin="28,26">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -28,28 +28,28 @@
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,24,0">
                         <TextBlock x:Name="PulseScore" Text="…" RenderTransformOrigin="0.5,0.5"
                                    FontFamily="{DynamicResource F_Ui}" FontSize="56"
-                                   Foreground="{DynamicResource B_Text}"
-                                   HorizontalAlignment="Center"/>
+                                   Foreground="{DynamicResource B_Text}"
+                                   HorizontalAlignment="Center"/>
                         <!-- 🆕 0.14.3: кардиограмма убрана как «техно-деталь»
                              (простому юзеру она ничего не говорит) -->
                         <Polyline x:Name="PulseSpark" Width="120" Height="36"
                                   Stroke="{DynamicResource B_Accent}" StrokeThickness="2"
                                   Visibility="Collapsed"
                                   HorizontalAlignment="Center" Margin="0,6,0,0"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock x:Name="PulseStatus" Text="Считаю…"
-                                   FontFamily="{DynamicResource F_Ui}" FontSize="15"
-                                   Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"/>
-                        <TextBlock x:Name="PulseSub" Text="" FontSize="13"
-                                   Foreground="{DynamicResource B_Dim}"
-                                   Margin="0,4,0,0" TextWrapping="Wrap"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- Умная проверка одним кликом -->
-            </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="PulseStatus" Text="Считаю…"
+                                   FontFamily="{DynamicResource F_Ui}" FontSize="15"
+                                   Foreground="{DynamicResource B_Text}" TextWrapping="Wrap"/>
+                        <TextBlock x:Name="PulseSub" Text="" FontSize="13"
+                                   Foreground="{DynamicResource B_Dim}"
+                                   Margin="0,4,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Умная проверка одним кликом -->
+            </Grid>
             <Border x:Name="SmartCard" Style="{StaticResource SimpleActionCard}" Margin="0,16,0,0" Height="110"
                     Padding="26,22" Cursor="Hand" MouseLeftButtonUp="Smart_Click"
                     ToolTip="Сам проверю диск, мусор и обновления, потом предложу исправить.">
@@ -67,7 +67,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-
+
             <!-- Четыре большие кнопки -->
             <UniformGrid Columns="2" Margin="0,16,0,0">
                 <Border Style="{StaticResource SimpleActionCard}" Margin="0,0,10,10" Height="200"
@@ -166,8 +166,8 @@
                        Margin="8,12,0,0" TextWrapping="Wrap" Cursor="Hand"
                        TextDecorations="Underline" MouseLeftButtonUp="GoAdvanced_Click"
                        ToolTip="Открыть Настройки на блоке «Вид»."/>
-        </StackPanel>
-    </ScrollViewer>
-</UserControl>
-
-
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+
+

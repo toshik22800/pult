@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWPF>true</UseWPF>
-    <Version>0.14.4</Version>
+    <Version>0.14.5</Version>
     <AssemblyName>Pult</AssemblyName>
   </PropertyGroup>
 

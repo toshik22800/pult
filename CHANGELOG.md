@@ -1,6 +1,67 @@
 # Пульт — журнал изменений (для ревью вторым ИИ)
 
-Репозитория git нет, это выжимка по коду. Свежее сверху.
+Репозиторий git есть (main, публичное репо `pult`), это выжимка по коду.
+Свежее сверху.
+
+## 0.14.5: первые окна (мастер 3 шага, гейт-щит) + фикс потери настроек (26.09)
+Волна закрыта по конвейеру BRIEF §6. Версия `Pult.csproj` = 0.14.5, запись
+0.14.5 в `ReleaseNotes.cs` (IsCurrent). Итоги: Debug/Release/стенд 0/0/0,
+`check_014` 11/11, `verify_renders` 15/15, аудиты 8×exit=0 (`audit_pult`
+XML 0, `xaml_audit` MISSING KEYS 0/HANDLERS 0, `audit_no_wiggle` 0,
+`audit_reverse` 0 (keys=38 names=341), `audit_glyphs_ctx` FINDINGS 0
+(xaml=84 cs=56), `audit_newnl` MIXED 0, `check_my_xml` PROBLEMS 0,
+`verify_renders` 15/15), `clip_check` fails=0, `fontclick` 13/13,
+`fxswitch` fails=0 (12 PASS), `auto` 16/16 спек; живость: breathe
+`heroOp 0.302..0.995`, `heroX −109..260`, `cardOp 0.353..0.999`;
+breathe-s `barOp 0.505..0.992`, `glintX −84..192`.
+- **Мастер первого запуска — три шага (WelcomeWizard, редизайн):**
+  «ШАГ N ИЗ 3» с точками-прогрессом; шаг 1 «Как показывать интерфейс?»
+  (Просто/Подробно), шаг 2 «Как рисовать эффекты?» (Авто/Минимум +
+  живое превью-дыхание), шаг 3 «Готово» с тремя подсказками «с чего
+  начать»; «Назад/Далее/Пропустить», «Открыть Пульт» в конце. Окно
+  выращено до 660×640 (см. ApplyScale), шрифт/масштаб/тема применяются
+  до показа окна — как в штатном старте.
+- **Гейт прав администратора (AdminGate):** щит-замок с пульсом и красной
+  рамкой «RESTRICTED», объяснение «почему нужны права», кнопки
+  «Перезапустить как админ»/«Выйти»; окно 560×440.
+- **Фикс сохранения настроек (корень жалобы «нажал — не сохранилось»):**
+  `WidgetLeft/WidgetTop` по умолчанию `double.NaN`; System.Text.Json без
+  `JsonNumberHandling.AllowNamedFloatingPointLiterals` бросал
+  ArgumentException ИМЕННО на записи, а `AppSettings.Save` глотал его
+  `catch`'ем — файл не появлялся, Save() «молчал», мастер возвращался
+  при каждом запуске. Фикс: общий `AppSettings.JsonOpts` (на чтение и
+  запись: `"NaN"` читается обратно, старые файлы с числами тоже) +
+  честные логи в AppLog («Сохранение настроек: …», «Мастер: файл настроек
+  не записался…»).
+- **Масштаб 100%: перегрузка `Appearance.ApplyScale(Window, double minScale)`**
+  — окна-диалоги больше не «дёргаются» вверх на полном масштабе
+  (мастер 660×640, гейт 560×440).
+- **Инструменты восстановлены (temp/opencode):** `render_adv`,
+  `stand.csproj`, 7 аудитов (`audit_pult/reverse/glyphs/xaml/no_wiggle/
+  newnl`, `check_my_xml`) по контрактам HANDOFF/BRIEF §6; `run_audits`
+  расширен до 8 скриптов → `audit_report.txt`; `wizshow` — харнесс окон
+  первого входа (Show() + DispatcherFrame-насос, handshake-файл шагов,
+  завершение `Environment.Exit` из тика: кадр с `Continue=false` зависал
+  на десятки секунд — диспетчер засыпал в WaitForOperation и не
+  пробуждался ни живым тикером, ни пульсом гейта); скрины 3 шагов и гейта
+  → `docs/wizard-step1..3.png`, `docs/admin-gate.png`.
+- **Кэш игр:** сидер `games_seed` прогнал `GetGames(true, ExtraGameDirs)`
+  → `%APPDATA%\Pult\games.json` = 4 игры с размерами (BG3 155ГБ,
+  GoreBox v27b 861МБ, GoreBox27 993МБ, Roblox 351МБ; total
+  157566301556) — честный рендер бара размера.
+- **Пины BASE в `run_renders.py`:** `Effects=3` (Auto на этом ПК =
+  Maximum), `Interface=1` (LIGHT требует «Подробно»),
+  `ExperimentalEnabled=False` (иначе ExpOn рисует LLM-карточку и
+  SECTIONS падает) — замерами, единственный способ держать LIGHT и
+  SECTIONS+bars одновременно.
+- **SimpleHomeView.xaml: NL нормализован** — находка восстановленного
+  `audit_newnl` (MIXED: 1 → 0): 38 CRCRLF-строк дизайнера + 135 CRLF →
+  чистый CRLF под доминирующим стилем, BOM сохранён, содержимое не тронуто.
+- **Публикация:** git-репозиторий (`-b main`, первый коммит `f819248`),
+  `.gitattributes` (`* -text` — байт-точность против автоконверсий),
+  `.gitignore`, `README.md`, `docs/` = 4 рендера + 4 скрина первых окон;
+  GitHub: публичное репо **pult** + Release с самораспаковывающимся
+  zip-экзешником (win-x64 self-contained).
 
 ## 0.14.4: дизайн-волна — приборная стена (Обзор), страница-ответ (Чат) (25.09)
 Скетчи Sys B и Chat 3 одобрены юзером → реализованы. Версия `Pult.csproj`
