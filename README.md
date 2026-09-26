@@ -1,57 +1,73 @@
-# Пульт
+# Pult
 
-Десктоп-панель управления для Windows: системный монитор, твики и приватность,
-чат с локальной языковой моделью, библиотека игр, журнал действий с откатом.
-Тёмный «приборный» интерфейс в стиле шкалы приборов, виджет поверх окон,
-пошаговый мастер первого запуска.
+[![build](https://github.com/toshik22800/pult/actions/workflows/build.yml/badge.svg)](https://github.com/toshik22800/pult/actions/workflows/build.yml) · **English** · [Русский](README.ru.md)
 
-WPF · C# · .NET 10 · всё локально.
+**A desktop control panel for Windows: system monitor, privacy tweaks, local-LLM chat, game library, and an action journal with one-click undo. Everything runs on your machine.**
 
-![Главный экран](docs/render_main_base.png)
-![Настройки](docs/render_settings.png)
-![Игры](docs/render_live-games.png)
-![Светлая тема](docs/render_light.png)
+Dark "instrument-panel" UI, always-on-top widget, first-run setup wizard.
+WPF · C# · .NET 10 · open source.
 
-## Возможности
+![Main screen](docs/render_main_base.png)
+![Settings](docs/render_settings.png)
+![Games](docs/render_live-games.png)
+![Light theme](docs/render_light.png)
 
-- **Действия** — плитки мгновенных действий и hero с кольцами CPU / RAM / Диск.
-- **Дом** (Простой интерфейс) — светофор состояния, «Проверить всё»,
-  цепочки из одной кнопки.
-- **Система** — 21 плашка в шести вкладках: обзор, скорость, хранилище,
-  твики реестра, железо, сеть. Автоколонки под высоту окна.
-- **Игры** — скан Steam, ярлыков и папок, поиск, сортировка, «Случайная»,
-  обложки, запуск.
-- **Чат** — общение с LLM, markdown-лайт, инструменты (tools) с подтверждением
-  опасных действий, история в `history.json`.
-- **История** — журнал действий с откатом и точками восстановления.
-- **Виджет** — часы и загрузка систем поверх окон.
-- **Настройки** — модель и эндпоинт, эффекты (Авто/Минимум/Обычные/Максимум),
-  интерфейс (Просто/Подробно), 4 темы-пресета + свои цвета HEX, масштаб,
-  папки игр, диагностика и бэкап.
+## Features
 
-## Безопасность
+- **Actions** — instant action tiles plus a hero gauge with CPU / RAM / disk rings.
+- **Home** — traffic-light status, "Check everything", one-button chains.
+- **System** — 21 widgets across six tabs: overview, speed, storage, registry tweaks, hardware, network. Columns adapt to window height.
+- **Games** — scans Steam, shortcuts and folders; search, sort, "Random pick", covers, launch.
+- **Chat** — talks to your local LLM (Ollama by default), markdown-lite, tools gated by confirmation, history in `history.json`.
+- **History** — every action is journaled with rollback and restore points.
+- **Widget** — clock and system load on top of other windows.
+- **Settings** — model & endpoint, effects (Auto/Low/Normal/Max), UI density, 4 theme presets + custom HEX colors, scale, game folders, diagnostics, backup.
 
-- **Всё локально.** Настройки, история и журнал — в `%APPDATA%\Pult`,
-  логи и кэш обложек — в `%LOCALAPPDATA%\Pult`. Ничего не уходит «в облако».
-- **Нет телеметрии, аналитики, трекеров и автообновления.** В коде нет ни
-  одного сборщика статистики; приложение не звонит домой само по себе.
-- **Сеть только там, где ты сам попросил:**
-  - эндпоинт LLM — по умолчанию `http://127.0.0.1:11434` (локальный Ollama),
-    любой внешний адрес указываешь только ты в настройках;
-  - веб-поиск (DuckDuckGo / Bing) и чтение ссылок — только когда запросишь
-    их из чата или вручную.
-- **Опасное — через подтверждение.** Реестр-твики, приватность, автозагрузка
-  и удаления выполняются только после `ConfirmDialog` и попадают в журнал
-  `actions.json` с возможностью отката. LLM нельзя выполнить опасную команду
-  молча — инструменты разделены на read-only и требующие подтверждения.
-- **Строгий режим приватности** (`StrictPrivacyMode`) дополнительно режет
-  доступ к буферу обмена, историю и логи и стирает их при выходе.
-- **Исходники открыты** — публичный репозиторий: код можно прочитать
-  и проверить до установки.
+## Requirements
 
-## Сборка
+- Windows 10 / 11, x64.
+- **To run the release:** nothing else — `Pult.exe` is self-contained, no .NET install needed.
+- **To build from source:** [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
-Требуется [.NET 10 SDK](https://dotnet.microsoft.com/download).
+## Download
+
+1. Get `pult-*.zip` from [Releases](https://github.com/toshik22800/pult/releases/latest).
+2. Unpack it and start `Pult.exe`.
+3. Optional integrity check — the SHA-256 of every asset is published in the release notes:
+
+```powershell
+Get-FileHash .\pult-0.14.5-win-x64.zip -Algorithm SHA256
+```
+
+## ⚠️ Before you run
+
+- The app **asks for administrator rights** — required for some tweaks.
+- Some features **change Windows registry values and privacy settings**.
+- Anything that touches the system goes through an explicit confirmation dialog and lands in an undoable journal — but **create a restore point / backup first** if you are not sure.
+- **Open source** — you can read the code before running it.
+
+## What it does NOT do
+
+- **No telemetry, no analytics, no trackers, no auto-updates** — there is simply no code for it.
+- **Network activity: none by default.** The app never phones home on its own. It touches the network only when *you* explicitly ask:
+  - the LLM endpoint — default `http://127.0.0.1:11434` (local Ollama); any external address is entered by you in Settings;
+  - web search and reading links — only on your request from the chat.
+- Your settings, history and journal stay in `%APPDATA%\Pult` on your disk.
+
+## This is the original project
+
+Official releases and development happen **only** at [`toshik22800/pult`](https://github.com/toshik22800/pult). Copies and forks may exist — the original lives here, and this is where issues, discussions and updates happen.
+
+## First run
+
+On the first launch you get an admin-rights gate and a three-step setup wizard (interface, effects, quick start):
+
+![Wizard step 1](docs/wizard-step1.png)
+![Wizard step 2](docs/wizard-step2.png)
+![Wizard step 3](docs/wizard-step3.png)
+![Admin gate](docs/admin-gate.png)
+
+## Build from source
 
 ```powershell
 git clone https://github.com/toshik22800/pult.git
@@ -59,14 +75,13 @@ cd pult
 dotnet build Pult/Pult.csproj -c Release
 ```
 
-Запуск с рабочей папки:
+Run from the working folder:
 
 ```powershell
 dotnet run --project Pult/Pult.csproj -c Release
 ```
 
-Самодостаточный релиз — один файл `Pult.exe` (не нужен .NET на машине того,
-кому кидаешь):
+Self-contained single-file release — one `Pult.exe`, no .NET required on the target machine (this is the exact command CI runs):
 
 ```powershell
 dotnet publish Pult/Pult.csproj -c Release -r win-x64 --self-contained true `
@@ -74,58 +89,40 @@ dotnet publish Pult/Pult.csproj -c Release -r win-x64 --self-contained true `
   -o publish/win-x64
 ```
 
-`publish/win-x64/Pult.exe` запаковывается в zip и кладётся в GitHub Release —
-ссылку на него можно скинуть в чат.
+`publish/win-x64/Pult.exe` is zipped and attached to a GitHub Release.
 
-При первом запуске покажется гейт «Нужны права администратора» (для части
-твиков) и мастер первого запуска из трёх шагов: интерфейс, эффекты, быстрый
-старт.
-
-![Шаг 1: интерфейс](docs/wizard-step1.png)
-![Шаг 2: эффекты](docs/wizard-step2.png)
-![Шаг 3: готово](docs/wizard-step3.png)
-![Гейт администратора](docs/admin-gate.png)
-
-## Структура
+## Project layout
 
 ```
 Pult/
-  App.xaml(.cs)          точка входа: гейт админа → мастер → главное окно
-  MainWindow.xaml(.cs)   главное окно (Действия, вкладки, меню)
-  WelcomeWizard.*        мастер первого запуска (3 шага)
-  AdminGate.*            гейт «доступ закрыт» → перезапуск от админа
+  App.xaml(.cs)          entry point: admin gate → wizard → main window
+  MainWindow.xaml(.cs)   main window (Actions, tabs, menu)
+  WelcomeWizard.*        first-run wizard (3 steps)
+  AdminGate.*            admin-rights gate → relaunch elevated
   Views/                 SimpleHomeView, SystemView, GamesView, ChatView,
                          SettingsView, HistoryView, WidgetsView
   Services/              SystemMonitor, TweakService, PrivacyService,
                          GameService, LlmClient, WebService, ThemeService,
-                         AppSettings, ActionJournal, AppLog… (все static)
-  Fonts/                 встроенные .ttf
-PROJECT.md               карта проекта для разработчика/ИИ
-BRIEF.md                 регламент качества и шаги проверки
-CHANGELOG.md             история версий
-HANDOFF.md               передаточный лист между сессиями
+                         AppSettings, ActionJournal, AppLog… (all static)
+  Fonts/                 embedded .ttf
+PROJECT.md               project map for developers / AI assistants
+BRIEF.md                 quality regimen and verification steps
+CHANGELOG.md             version history
+CONTRIBUTING.md          how to build and contribute
 ```
 
-## Как это разрабатывалось
+## Quality
 
-Проект прошёл последовательные «волны» (0.9 → 0.14): каждая волна —
-конкретное улучшение с честной проверкой. Контроль качества живёт в
-`BRIEF.md` (§6): сборка Debug/Release → рендеры всех экранов → CONTENT-пороги
-по пикселям → аудиты XAML (форматирование, отсутствие «wiggle»-анимаций,
-коды глифов MDL2) → живые проверки сценариев маркерами, а не «на глаз».
-Правки диалоговых XAML держатся в UTF-8 BOM + `\r\r\n`, как их выдал дизайнер,
-— расхождения ловятся автоматической нормализацией.
+Every development wave ends with the same honest pipeline (`BRIEF.md` §6): Debug + Release builds → renders of all screens against pixel thresholds → XAML audits (formatting, no wiggle animations, MDL2 glyph codes) → live scenario checks with markers, not eyeballing. Dialog XAML is kept byte-exact (UTF-8 BOM + `\r\r\n`), enforced by automated normalization.
 
-`CHANGELOG.md` и окно «Патчи» (`ReleaseNotes`) обновляются с каждой версией:
-версия в `Pult.csproj` и `IsCurrent` в `ReleaseNotes` должны совпадать.
+`CHANGELOG.md` and the in-app Patches window (`ReleaseNotes`) update with every release; the version in `Pult.csproj` and `IsCurrent` in `ReleaseNotes` must match.
 
-## Обратная связь
+## Feedback
 
-- Баги и конкретные предложения — [Issues](https://github.com/toshik22800/pult/issues).
-- Впечатления, «плюсы и минусы», идеи — [Discussions](https://github.com/toshik22800/pult/discussions).
+- Bugs and concrete suggestions → [Issues](https://github.com/toshik22800/pult/issues)
+- Impressions, pros & cons, ideas → [Discussions](https://github.com/toshik22800/pult/discussions)
+- Code contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md)
 
----
+## License
 
-© 2026 toshik22800 — все права защищены. Лицензии на код нет: читать,
-обсуждать и присылать улучшения — пожалуйста; брать код в свои проекты —
-только с разрешения автора.
+[MIT](LICENSE) © 2026 toshik22800 — free to use, modify and redistribute, including commercially, as long as the copyright notice and the license travel with the code.
